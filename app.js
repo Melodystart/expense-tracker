@@ -7,6 +7,8 @@ const exphbs = require('express-handlebars');
 const Record = require('./models/record') // 載入 Record model
 const Category = require('./models/category') // 載入 Category model
 const User = require('./models/user') // 載入 User model
+const bodyParser = require('body-parser')  // 引用 body-parser
+
 
 // 加入這段 code, 僅在非正式環境時, 使用 dotenv
 if (process.env.NODE_ENV !== 'production') {
@@ -31,12 +33,26 @@ db.once('open', () => {
 app.engine('hbs', exphbs.engine({ defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', 'hbs')
 
+app.use(bodyParser.urlencoded({ extended: true }))
+
+
 // 設定首頁路由
 app.get('/', (req, res) => {
   Record.find() // 取出 Record model 裡的所有資料
     .lean() // 把 Mongoose 的 Model 物件轉換成乾淨的 JavaScript 資料陣列
     .then(records => res.render('index', { records: records })) // 將資料傳給 index 樣板
     .catch(error => console.error(error)) // 錯誤處理
+})
+
+app.get('/records/new', (req, res) => {
+  return res.render('new')
+})
+
+app.post('/records', (req, res) => {
+  const name = req.body.name       // 從 req.body 拿出表單裡的 name 資料
+  return Record.create({ name })     // 存入資料庫
+    .then(() => res.redirect('/')) // 新增完成後導回首頁
+    .catch(error => console.log(error))
 })
 
 // 設定 port
