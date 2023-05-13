@@ -8,7 +8,9 @@ const Record = require('./models/record') // 載入 Record model
 const Category = require('./models/category') // 載入 Category model
 const User = require('./models/user') // 載入 User model
 const bodyParser = require('body-parser')  // 引用 body-parser
-
+const Handlebars = require('handlebars') //
+const hbshelpers = require('handlebars-helpers'); //引用handlebars-helpers
+const multihelpers = hbshelpers();
 
 // 加入這段 code, 僅在非正式環境時, 使用 dotenv
 if (process.env.NODE_ENV !== 'production') {
@@ -30,8 +32,19 @@ db.once('open', () => {
   console.log('mongodb connected!')
 })
 
-app.engine('hbs', exphbs.engine({ defaultLayout: 'main', extname: '.hbs' }))
+app.engine('hbs', exphbs.engine({ helpers: multihelpers, defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', 'hbs')
+
+//引用npm handlebars-dateformat調整日期格式
+Handlebars.registerHelper('dateFormat', require('handlebars-dateformat'));
+
+//自定義 handlebars-helper調整icon格式
+Handlebars.registerHelper('iconFormat', function (url) {
+  const iconShape = url.split('/').slice(4)[0].split('?')[0]
+  const iconStyle = url.split('/').slice(4)[0].split('?')[1].split('=')[1]
+  const fontAwesomeIcon = `<i class= "fa-${iconShape} fa-${iconStyle} h5"></i>`
+  return fontAwesomeIcon
+})
 
 app.use(bodyParser.urlencoded({ extended: true }))
 
@@ -40,7 +53,8 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.get('/', (req, res) => {
   Record.find() // 取出 Record model 裡的所有資料
     .lean() // 把 Mongoose 的 Model 物件轉換成乾淨的 JavaScript 資料陣列
-    .then(records => res.render('index', { records: records })) // 將資料傳給 index 樣板
+    .then(records =>
+      res.render('index', { records })) // 將資料傳給 index 樣板
     .catch(error => console.error(error)) // 錯誤處理
 })
 

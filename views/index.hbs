@@ -1,8 +1,38 @@
+<table class="table table-striped">
+
+  <thead class="table-light">
+    <tr>
+      <th scope="col">類別</th>
+      <th scope="col">項目</th>
+      <th scope="col">日期</th>
+      <th scope="col">金額</th>
+      <th scope="col">編輯</th>
+      <th scope="col">刪除</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {{#each records}}
+    <tr>
+      <td>
+        {{{iconFormat this.categoryUrl}}}
+      </td>
+
+      <td>
+        {{this.name}}
+      </td>
+
+      <td>
+        {{dateFormat this.date "YYYY/MM/DD"}}
+      </td>
+
+      <td>
+        {{this.amount}}
+      </td>
+    <tr>
+      {{/each}}
+  </tbody>
+
+</table>
+
 <a href="./records/new">Create</a>
-<ul>
-  {{#each records}}
-  <li>
-    {{this.name}}
-  </li>
-  {{/each}}
-</ul>
