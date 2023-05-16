@@ -3,7 +3,7 @@
   <thead class="table-light">
     <tr>
       <th scope="col">類別</th>
-      <th scope="col">項目</th>
+      <th scope="col">名稱</th>
       <th scope="col">日期</th>
       <th scope="col">金額</th>
       <th scope="col">編輯</th>
@@ -15,7 +15,7 @@
     {{#each records}}
     <tr>
       <td>
-        {{{iconFormat this.categoryUrl}}}
+        {{{iconFormat this.categoryId.name}}}
       </td>
 
       <td>
@@ -35,4 +35,4 @@
 
 </table>
 
-<a href="./records/new">Create</a>
+<a href="./records/new">新增支出</a>

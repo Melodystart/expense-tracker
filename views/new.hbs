@@ -1,7 +1,32 @@
 <form action="/records" method="POST">
-  <input type="text" placeholder="名稱" name="name">
-  <input type="Date" placeholder="日期" name="date">
-  <input type="text" placeholder="類別" name="category">
-  <input type="Number" placeholder="金額" name="amount">
-  <button type="submit">Create</button>
+
+  <div class="my-3">
+    <label for="name">名稱</label>
+    <input type="text" name="name" id="name" class="form-control" required>
+  </div>
+
+  <div class="my-3">
+    <label for="date">日期</label>
+    <input type="Date" name="date" id="date" class="form-control" required>
+  </div>
+
+  <div class="my-3">
+    <label for="amount">金額</label>
+    <input type="Number" name="amount" id="amount" class="form-control" required>
+  </div>
+
+  <div class="my-3">
+    <label for="categoryName">類別</label>
+    <select class="form-select" aria-label="categoryName" name="categoryName" id="categoryName">
+      <option selected>請選擇</option>
+      <option>家居物業</option>
+      <option>交通出行</option>
+      <option>休閒娛樂</option>
+      <option>餐飲食品</option>
+      <option>其他</option>
+    </select>
+  </div>
+
+  <button type="submit">新增支出</button>
+
 </form>

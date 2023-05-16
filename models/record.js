@@ -1,10 +1,7 @@
+const { text } = require('body-parser')
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const recordSchema = new Schema({
-  id: {
-    type: Number,
-    required: true
-  },
   name: {
     type: String,
     required: true
@@ -22,13 +19,11 @@ const recordSchema = new Schema({
     type: Number,
     required: true
   },
-  categoryId: {
-    type: Number,
+  categoryId: {  // 加入關聯設定
+    type: Schema.Types.ObjectId,
+    ref: 'Category',
+    index: true,
     required: true
-  },
-  categoryUrl: {
-    type: String,
-    required: true
-  },
+  }
 })
 module.exports = mongoose.model('Record', recordSchema)
