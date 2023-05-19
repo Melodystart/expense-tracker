@@ -84,6 +84,34 @@ app.post('/records', (req, res) => {
     )
 })
 
+app.get('/records/:id/edit', (req, res) => {
+  const id = req.params.id
+  return Record.findById(id)
+    .populate('categoryId') // 與Category Model建立連結(兩表間的key值)
+    .lean()
+    .then((record) => res.render('edit', { record }))
+    .catch(error => console.log(error))
+})
+
+app.post('/records/:id/edit', (req, res) => {
+  const id = req.params.id
+  const { name, date, amount, categoryName } = req.body //從req.body拿出表單資料
+  Category.findOne({ name: categoryName })
+    .then(category => {
+      Record.findById(id)
+        .then(record => {
+          record.name = name
+          record.date = date
+          record.amount = amount
+          record.categoryId = category.id
+          record.userId = 1
+          return record.save()
+        })
+        .then(() => res.redirect('/'))
+        .catch(error => console.log(error))
+    })
+})
+
 // 設定 port
 app.listen(PORT, () => {
   console.log(`App is running on http://localhost:${PORT}`)
