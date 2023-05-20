@@ -86,7 +86,7 @@ app.post('/records', (req, res) => {
 
 app.get('/records/:id/edit', (req, res) => {
   const id = req.params.id
-  return Record.findById(id)
+  Record.findById(id)
     .populate('categoryId') // 與Category Model建立連結(兩表間的key值)
     .lean()
     .then((record) => res.render('edit', { record }))
@@ -110,6 +110,13 @@ app.post('/records/:id/edit', (req, res) => {
         .then(() => res.redirect('/'))
         .catch(error => console.log(error))
     })
+})
+
+app.post('/records/:id/delete', (req, res) => {
+  const id = req.params.id
+  Record.deleteOne({ '_id': id })
+    .then(() => res.redirect('/'))
+    .catch(error => console.log(error))
 })
 
 // 設定 port
