@@ -12,6 +12,7 @@ const Handlebars = require('handlebars')
 const hbshelpers = require('handlebars-helpers'); //引用handlebars-helpers
 const multihelpers = hbshelpers();
 const NumeralHelper = require("handlebars.numeral"); //千分位用途
+const methodOverride = require('method-override')  // 載入 method-override
 
 const categoryIcon = {                            //將類別名稱轉換為url
   家居物業: "https://fontawesome.com/icons/home?style=solid",
@@ -65,6 +66,9 @@ NumeralHelper.registerHelpers(Handlebars);
 
 // 用 app.use 規定每一筆請求都需要透過 body-parser 進行前置處理
 app.use(bodyParser.urlencoded({ extended: true }))
+
+// 設定每一筆請求都會透過 methodOverride 進行前置處理
+app.use(methodOverride('_method'))
 
 // 設定首頁路由
 app.get('/', (req, res) => {
@@ -137,7 +141,7 @@ app.get('/records/:id/edit', (req, res) => {
     .catch(error => console.log(error))
 })
 
-app.post('/records/:id/edit', (req, res) => {
+app.put('/records/:id', (req, res) => {
   const id = req.params.id
   const { name, date, amount, categoryName } = req.body //從req.body拿出表單資料
   Category.findOne({ name: categoryName })
@@ -156,7 +160,7 @@ app.post('/records/:id/edit', (req, res) => {
     })
 })
 
-app.post('/records/:id/delete', (req, res) => {
+app.delete('/records/:id', (req, res) => {
   const id = req.params.id
   Record.deleteOne({ '_id': id })
     .then(() => res.redirect('/'))
