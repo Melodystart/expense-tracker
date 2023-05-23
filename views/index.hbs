@@ -1,48 +1,82 @@
-<table class="table table-striped">
+<div class="container" style="width: 40rem;">
+  <form action="/search">
 
-  <thead class="table-light">
-    <tr>
-      <th scope="col">類別</th>
-      <th scope="col">名稱</th>
-      <th scope="col">日期</th>
-      <th scope="col">金額</th>
-      <th scope="col">編輯</th>
-      <th scope="col">刪除</th>
-    </tr>
-  </thead>
+    <div class="input-group mt-5">
+      <select class="form-select" aria-label="sort" name="sort" id="sort">
+        <option value="" selected>排序</option>
+        <option value="最新" {{#is sort "最新" }}selected{{/is}}>最新</option>
+        <option value="金額最大" {{#is sort "金額最大" }}selected{{/is}}>金額最大</option>
+        <option value="金額最小" {{#is sort "金額最小" }}selected{{/is}}>金額最小</option>
+      </select>
 
-  <tbody>
-    {{#each records}}
-    <tr>
-      <td>
-        {{{iconFormat this.categoryId.name}}}
-      </td>
+      <select class="form-select" aria-label="categoryName" name="categoryName" id="categoryName">
+        <option value="" selected>類別</option>
+        <option value="家居物業" {{#is categoryName "家居物業" }}selected{{/is}}>家居物業</option>
+        <option value="交通出行" {{#is categoryName "交通出行" }}selected{{/is}}>交通出行</option>
+        <option value="休閒娛樂" {{#is categoryName "休閒娛樂" }}selected{{/is}}>休閒娛樂</option>
+        <option value="餐飲食品" {{#is categoryName "餐飲食品" }}selected{{/is}}>餐飲食品</option>
+        <option value="其他" {{#is categoryName "其他" }}selected{{/is}}>其他</option>
+      </select>
 
-      <td>
-        {{this.name}}
-      </td>
+      <button class="btn btn-primary" type="submit">送出</button>
+      <a href="/" class="btn btn-outline-secondary">取消篩選</a>
+      <a href="./records/new" class="btn btn-primary">新增支出</a>
+    </div>
 
-      <td>
-        {{dateFormat this.date "YYYY-MM-DD"}}
-      </td>
+  </form>
 
-      <td>
-        {{this.amount}}
-      </td>
+  <div class="card my-3">
+    <div class="card-body">
+      <h7 class="card-title"><strong>金額合計：</strong></h7>
+      <h1 class="card-text" style="text-align: right">{{number totalAmount}}
+      </h1>
+    </div>
+  </div>
 
-      <td>
-        <a href="./records/{{ this._id }}/edit" class="btn btn-primary btn-sm">編輯</a>
-      </td>
+  <table class="table table-hover">
 
-      <td>
-        <form action="./records/{{ this._id }}/delete" method="POST" style="display: inline;">
-          <button type="submit" class="btn btn-primary btn-sm">刪除</button>
-        </form>
-      </td>
-    <tr>
-      {{/each}}
-  </tbody>
+    <thead class="table-light">
+      <tr>
+        <th scope="col">類別</th>
+        <th scope="col">名稱</th>
+        <th scope="col">日期</th>
+        <th scope="col">金額</th>
+        <th scope="col">編輯</th>
+        <th scope="col">刪除</th>
+      </tr>
+    </thead>
 
-</table>
+    <tbody>
+      {{#each records}}
+      <tr>
+        <td>
+          {{{iconFormat this.categoryId.name}}}
+        </td>
 
-<a href="./records/new">新增支出</a>
+        <td>
+          {{this.name}}
+        </td>
+
+        <td>
+          {{dateFormat this.date "YYYY-MM-DD"}}
+        </td>
+
+        <td style="text-align: right">
+          {{number this.amount}}
+        </td>
+
+        <td>
+          <a href="./records/{{ this._id }}/edit" class="btn btn-primary btn-sm">編輯</a>
+        </td>
+
+        <td>
+          <form action="./records/{{ this._id }}/delete" method="POST" style="display: inline;">
+            <button type="submit" class="btn btn-primary btn-sm">刪除</button>
+          </form>
+        </td>
+      <tr>
+        {{/each}}
+    </tbody>
+
+  </table>
+</div>

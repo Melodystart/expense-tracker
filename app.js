@@ -11,6 +11,8 @@ const User = require('./models/user') // 載入 User model
 const Handlebars = require('handlebars')
 const hbshelpers = require('handlebars-helpers'); //引用handlebars-helpers
 const multihelpers = hbshelpers();
+const NumeralHelper = require("handlebars.numeral"); //千分位用途
+
 const categoryIcon = {                            //將類別名稱轉換為url
   家居物業: "https://fontawesome.com/icons/home?style=solid",
   交通出行: "https://fontawesome.com/icons/shuttle-van?style=solid",
@@ -18,7 +20,11 @@ const categoryIcon = {                            //將類別名稱轉換為url
   餐飲食品: "https://fontawesome.com/icons/utensils?style=solid",
   其他: "https://fontawesome.com/icons/pen?style=solid"
 }
-
+const sortList = {
+  最新: { date: 'desc' },
+  金額最大: { amount: 'desc' },
+  金額最小: { amount: 'asc' },
+}
 
 // 加入這段 code, 僅在非正式環境時, 使用 dotenv
 if (process.env.NODE_ENV !== 'production') {
@@ -54,18 +60,56 @@ Handlebars.registerHelper('iconFormat', function (categoryName) {
   const fontAwesomeIcon = `<i class= "fa-${iconShape} fa-${iconStyle} h5"></i>`
   return fontAwesomeIcon
 })
+//引用npm handlebars.numeral調整金額千分位格式
+NumeralHelper.registerHelpers(Handlebars);
 
 // 用 app.use 規定每一筆請求都需要透過 body-parser 進行前置處理
 app.use(bodyParser.urlencoded({ extended: true }))
 
 // 設定首頁路由
 app.get('/', (req, res) => {
-  Record.find() // 取出 Record model 裡的所有資料
+  let totalAmount = 0
+  Record.find()
     .populate('categoryId') // 與Category Model建立連結(兩表間的key值)
     .lean() // 把 Mongoose 的 Model 物件轉換成乾淨的 JavaScript 資料陣列
-    .then(records =>
-      res.render('index', { records }))
+    .sort({ date: 'desc' })
+    .then(records => {
+      records.forEach(record => totalAmount += record.amount),
+        res.render('index', { records, totalAmount })
+    })
     .catch(error => console.error(error))
+})
+
+// 設定篩選及排序路由
+app.get('/search', (req, res) => {
+  let totalAmount = 0
+  const categoryName = req.query.categoryName
+  let sort = req.query.sort
+  if (!sort) { sort = "最新" }     //若沒選取排序方式，預設by最新日期排序
+  if (categoryName) {              //若有選取篩選分類，取出具有該分類id的records
+    Category.findOne({ name: categoryName })
+      .then(category =>
+        Record.find({ categoryId: category._id })
+          .populate('categoryId')  // 與Category Model建立連結(兩表間的key值)
+          .lean()
+          .sort(sortList[sort])
+          .then(records => {
+            records.forEach(record => totalAmount += record.amount),
+              res.render('index', { records, sort, categoryName, totalAmount })
+          })
+          .catch(error => console.error(error))
+      )
+  } else {
+    Record.find()                     //若沒選取篩選分類，取出全部records資料
+      .populate('categoryId')         // 與Category Model建立連結(兩表間的key值)
+      .lean() // 把 Mongoose 的 Model 物件轉換成乾淨的 JavaScript 資料陣列
+      .sort(sortList[sort])
+      .then(records => {
+        records.forEach(record => totalAmount += record.amount),
+          res.render('index', { records, sort, totalAmount })
+      })
+      .catch(error => console.error(error))
+  }
 })
 
 app.get('/records/new', (req, res) => {
