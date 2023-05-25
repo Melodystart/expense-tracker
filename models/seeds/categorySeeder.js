@@ -1,13 +1,11 @@
-const mongoose = require('mongoose')
 const Category = require('../category') // 載入 category model
+const db = require('../../config/mongoose')
 const categoryList = ['家居物業', '交通出行', '休閒娛樂', '餐飲食品', '其他']
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
 }
 
-mongoose.connect(process.env.MONGODB_URI)
-const db = mongoose.connection
 db.on('error', () => {
   console.log('mongodb error!')
 })
