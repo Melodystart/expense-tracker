@@ -1,32 +1,34 @@
-<form action="/records/{{ record._id }}?_method=PUT" method="POST">
+<div class="container" style="width: 40rem;">
+  <h5 class="mt-3"><strong>請修改你的支出</strong></h5>
+  <form action="/records/{{ record._id }}?_method=PUT" method="POST">
+    <div class="my-3">
+      <label for="name">名稱</label>
+      <input type="text" name="name" id="name" class="form-control" value="{{record.name}}" required>
+    </div>
 
-  <div class="my-3">
-    <label for="name">名稱</label>
-    <input type="text" name="name" id="name" class="form-control" value="{{record.name}}" required>
-  </div>
+    <div class="my-3">
+      <label for="date">日期</label>
+      <input type="date" name="date" id="date" class="form-control" value="{{dateFormat record.date "YYYY-MM-DD" }}"
+        required>
+    </div>
 
-  <div class="my-3">
-    <label for="date">日期</label>
-    <input type="date" name="date" id="date" class="form-control" value="{{dateFormat record.date "YYYY-MM-DD" }}"
-      required>
-  </div>
+    <div class="my-3">
+      <label for="amount">金額</label>
+      <input type="Number" name="amount" id="amount" class="form-control" value="{{record.amount}}" required>
+    </div>
 
-  <div class="my-3">
-    <label for="amount">金額</label>
-    <input type="Number" name="amount" id="amount" class="form-control" value="{{record.amount}}" required>
-  </div>
+    <div class="my-3">
+      <label for="categoryName">類別</label>
+      <select class="form-select" aria-label="categoryName" name="categoryName" id="categoryName">
+        <option value="家居物業" {{#is record.categoryId.name "家居物業" }}selected{{/is}}>家居物業</option>
+        <option value="交通出行" {{#is record.categoryId.name "交通出行" }}selected{{/is}}>交通出行</option>
+        <option value="休閒娛樂" {{#is record.categoryId.name "休閒娛樂" }}selected{{/is}}>休閒娛樂</option>
+        <option value="餐飲食品" {{#is record.categoryId.name "餐飲食品" }}selected{{/is}}>餐飲食品</option>
+        <option value="其他" {{#is record.categoryId.name "其他" }}selected{{/is}}>其他</option>
+      </select>
+    </div>
 
-  <div class="my-3">
-    <label for="categoryName">類別</label>
-    <select class="form-select" aria-label="categoryName" name="categoryName" id="categoryName">
-      <option value="家居物業" {{#is record.categoryId.name "家居物業" }}selected{{/is}}>家居物業</option>
-      <option value="交通出行" {{#is record.categoryId.name "交通出行" }}selected{{/is}}>交通出行</option>
-      <option value="休閒娛樂" {{#is record.categoryId.name "休閒娛樂" }}selected{{/is}}>休閒娛樂</option>
-      <option value="餐飲食品" {{#is record.categoryId.name "餐飲食品" }}selected{{/is}}>餐飲食品</option>
-      <option value="其他" {{#is record.categoryId.name "其他" }}selected{{/is}}>其他</option>
-    </select>
-  </div>
+    <button type="submit" class="btn btn-primary btn-sm mb-3">儲存</button>
 
-  <button type="submit" class="btn btn-primary btn-sm">儲存</button>
-  <a href="/" class="btn btn-primary btn-sm">首頁</a>
-</form>
+  </form>
+</div>
