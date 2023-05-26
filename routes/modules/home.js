@@ -4,6 +4,7 @@ const router = express.Router()
 // 引用 Record、Category model
 const Record = require('../../models/record')
 const Category = require('../../models/category')
+const User = require('../../models/user')
 
 const sortList = {
   最新: { date: 'desc' },

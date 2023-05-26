@@ -4,6 +4,7 @@ const router = express.Router()
 // 引用 Record、Category model
 const Record = require('../../models/record')
 const Category = require('../../models/category')
+const User = require('../../models/user')
 
 // 設定路由：讀取新增record介面
 router.get('/new', (req, res) => {
