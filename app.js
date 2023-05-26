@@ -24,6 +24,8 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const routes = require('./routes')
+// 載入設定檔，要寫在 express-session 以後
+const usePassport = require('./config/passport')
 require('./config/mongoose')
 
 const app = express()
@@ -47,6 +49,9 @@ Handlebars.registerHelper('iconFormat', function (categoryName) {
 })
 //引用npm handlebars.numeral調整金額千分位格式
 NumeralHelper.registerHelpers(Handlebars);
+
+// 呼叫 Passport 函式並傳入 app，這條要寫在路由之前
+usePassport(app)
 
 // 用 app.use 規定每一筆請求都需要透過 body-parser 進行前置處理
 app.use(bodyParser.urlencoded({ extended: true }))

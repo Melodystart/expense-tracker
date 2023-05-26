@@ -22,7 +22,8 @@
     "handlebars-helpers": "^0.10.0",
     "handlebars.numeral": "^0.2.0",
     "method-override": "^3.0.0",
-    "mongoose": "^7.1.0"
+    "mongoose": "^7.1.0",
+    "passport": "^0.6.0"
   },
   "devDependencies": {
     "dotenv": "^16.0.3"
