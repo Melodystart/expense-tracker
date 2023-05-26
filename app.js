@@ -1,16 +1,16 @@
-// 載入 express 並建構應用程式伺服器
 const express = require('express')
+const session = require('express-session')
 // 如果在 Heroku 環境則使用 process.env.PORT, 否則為本地環境，使用 3000 
 const PORT = process.env.PORT || 3000
 const exphbs = require('express-handlebars')
-const bodyParser = require('body-parser') // 引用 body-parser
-const User = require('./models/user') // 載入 User model
+const bodyParser = require('body-parser')
+const User = require('./models/user')
 const Handlebars = require('handlebars')
-const hbshelpers = require('handlebars-helpers'); //引用handlebars-helpers
+const hbshelpers = require('handlebars-helpers');
 const multihelpers = hbshelpers();
-const NumeralHelper = require("handlebars.numeral"); //千分位用途
-const methodOverride = require('method-override')  // 載入 method-override
-const categoryIcon = {                            //將類別名稱轉換為url
+const NumeralHelper = require("handlebars.numeral"); //引用將金額以千分位格式呈現
+const methodOverride = require('method-override')
+const categoryIcon = {                              //對照表：將類別名稱轉換為url
   家居物業: "https://fontawesome.com/icons/home?style=solid",
   交通出行: "https://fontawesome.com/icons/shuttle-van?style=solid",
   休閒娛樂: "https://fontawesome.com/icons/grin-beam?style=solid",
@@ -22,15 +22,18 @@ const categoryIcon = {                            //將類別名稱轉換為url
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
 }
-// 引用路由器
+
 const routes = require('./routes')
 require('./config/mongoose')
 
 const app = express()
-
 app.engine('hbs', exphbs.engine({ helpers: multihelpers, defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', 'hbs')
-
+app.use(session({
+  secret: 'ThisIsMySecret',
+  resave: false,
+  saveUninitialized: true
+}))
 //引用npm handlebars-dateformat調整日期格式
 Handlebars.registerHelper('dateFormat', require('handlebars-dateformat'));
 

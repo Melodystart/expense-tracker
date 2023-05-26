@@ -17,6 +17,7 @@
     "bootstrap": "^5.2.3",
     "express": "^4.18.2",
     "express-handlebars": "^7.0.7",
+    "express-session": "^1.17.3",
     "handlebars-dateformat": "^1.1.3",
     "handlebars-helpers": "^0.10.0",
     "handlebars.numeral": "^0.2.0",
