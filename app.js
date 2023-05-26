@@ -4,7 +4,6 @@ const express = require('express')
 const PORT = process.env.PORT || 3000
 const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser') // 引用 body-parser
-
 const User = require('./models/user') // 載入 User model
 const Handlebars = require('handlebars')
 const hbshelpers = require('handlebars-helpers'); //引用handlebars-helpers

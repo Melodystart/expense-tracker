@@ -1,14 +1,15 @@
 // 引用 Express 與 Express 路由器
 const express = require('express')
 const router = express.Router()
-const Record = require('../../models/record') // 引用 Record model
-const Category = require('../../models/category') // 載入 Category model
+// 引用 Record、Category model
+const Record = require('../../models/record')
+const Category = require('../../models/category')
+
 const sortList = {
   最新: { date: 'desc' },
   金額最大: { amount: 'desc' },
   金額最小: { amount: 'asc' },
 }
-
 
 // 設定路由：首頁
 router.get('/', (req, res) => {

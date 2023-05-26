@@ -1,8 +1,9 @@
 // 引用 Express 與 Express 路由器
 const express = require('express')
 const router = express.Router()
-const Record = require('../../models/record') // 引用 Record model
-const Category = require('../../models/category') // 載入 Category model
+// 引用 Record、Category model
+const Record = require('../../models/record')
+const Category = require('../../models/category')
 
 // 設定路由：讀取新增record介面
 router.get('/new', (req, res) => {
