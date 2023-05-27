@@ -10,6 +10,8 @@ const hbshelpers = require('handlebars-helpers');
 const multihelpers = hbshelpers();
 const NumeralHelper = require("handlebars.numeral"); //引用將金額以千分位格式呈現
 const methodOverride = require('method-override')
+const flash = require('connect-flash')
+
 const categoryIcon = {                              //對照表：將類別名稱轉換為url
   家居物業: "https://fontawesome.com/icons/home?style=solid",
   交通出行: "https://fontawesome.com/icons/shuttle-van?style=solid",
@@ -59,10 +61,14 @@ app.use(methodOverride('_method'))
 // 呼叫 Passport 函式並傳入 app，這條要寫在路由之前
 usePassport(app)
 
+app.use(flash())
+
 // 把 req 裡的登入狀態交接給 res
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.isAuthenticated()
   res.locals.user = req.user
+  res.locals.success_msg = req.flash('success_msg')  // 設定 success_msg 訊息
+  res.locals.warning_msg = req.flash('warning_msg')  // 設定 warning_msg 訊息
   next()
 })
 
