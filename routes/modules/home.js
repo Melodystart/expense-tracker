@@ -14,8 +14,9 @@ const sortList = {
 
 // 設定路由：首頁
 router.get('/', (req, res) => {
+  const userId = req.user._id
   let totalAmount = 0
-  Record.find()
+  Record.find({ userId })
     .populate('categoryId') // 與Category Model建立連結(兩表間的key值)
     .lean() // 把 Mongoose 的 Model 物件轉換成乾淨的 JavaScript 資料陣列
     .sort({ date: 'desc' })
@@ -28,15 +29,19 @@ router.get('/', (req, res) => {
 
 // 設定路由：篩選及排序
 router.get('/search', (req, res) => {
-  let totalAmount = 0
+  const userId = req.user._id
   const categoryName = req.query.categoryName
   let sort = req.query.sort
-  if (!sort) { sort = "最新" }     //若沒選取排序方式，預設by最新日期排序
-  if (categoryName) {              //若有選取篩選分類，取出具有該分類id的records
+  let totalAmount = 0
+
+  if (!sort) { sort = "最新" }   //預設by最新日期排序
+
+  if (categoryName) {           //篩選具有該分類id的records
     Category.findOne({ name: categoryName })
       .then(category =>
-        Record.find({ categoryId: category._id })
-          .populate('categoryId')  // 與Category Model建立連結(兩表間的key值)
+
+        Record.find({ categoryId: category._id, userId })
+          .populate('categoryId')  //與Category Model建立連結
           .lean()
           .sort(sortList[sort])
           .then(records => {
@@ -46,9 +51,9 @@ router.get('/search', (req, res) => {
           .catch(error => console.error(error))
       )
   } else {
-    Record.find()                     //若沒選取篩選分類，取出全部records資料
-      .populate('categoryId')         // 與Category Model建立連結(兩表間的key值)
-      .lean() // 把 Mongoose 的 Model 物件轉換成乾淨的 JavaScript 資料陣列
+    Record.find({ userId })   //沒篩選分類，取出user全部records
+      .populate('categoryId') // 與Category Model建立連結
+      .lean() // 把 Mongoose的Model物件轉換成JavaScript資料陣列
       .sort(sortList[sort])
       .then(records => {
         records.forEach(record => totalAmount += record.amount),
