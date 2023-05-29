@@ -20,8 +20,8 @@ router.post('/', (req, res) => {
     .lean()
     .then(category =>
 
-      Record.create({ name, date, amount, userId, categoryId: category._id }) // 存入資料庫
-        .then(() => res.redirect('/')) // 新增完成後導回首頁
+      Record.create({ name, date, amount, userId, categoryId: category._id })
+        .then(() => res.redirect('/')) 
         .catch(error => console.log(error))
     )
 })
@@ -42,7 +42,7 @@ router.get('/:id/edit', (req, res) => {
 router.put('/:id', (req, res) => {
   const _id = req.params.id
   const userId = req.user._id
-  const { name, date, amount, categoryName } = req.body //從req.body拿出表單資料
+  const { name, date, amount, categoryName } = req.body
 
   Category.findOne({ name: categoryName })
     .then(category => {
@@ -59,6 +59,7 @@ router.put('/:id', (req, res) => {
         .catch(error => console.log(error))
     })
 })
+
 // 設定路由：刪除record資料
 router.delete('/:id', (req, res) => {
   const _id = req.params.id

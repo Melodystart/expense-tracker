@@ -1,33 +1,65 @@
-const Record = require('../record') // 載入 record model
-const recordList = require('../../record.json').results //引入json檔案
-const Category = require('../category') // 載入 category model
-const db = require('../../config/mongoose')
-const categoryList = ['家居物業', '交通出行', '休閒娛樂', '餐飲食品', '其他']
-let categoryList_Id = ""
-
+const bcrypt = require('bcryptjs')
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
 }
+const Record = require('../record')
+const Category = require('../category')
+const User = require('../user')
+const recordList = require('../../record.json').results //引入json檔案
+const db = require('../../config/mongoose')
+
+const SEED_USER = [{
+  name: '廣志',
+  email: 'user1@example.com',
+  password: '12345678',
+  recordNumber: [0, 1, 2, 4]
+},
+{
+  name: '小新',
+  email: 'user2@example.com',
+  password: '12345678',
+  recordNumber: [3]
+}]
 
 db.on('error', () => {
   console.log('mongodb error!')
 })
 
 db.once('open', () => {
-  console.log('mongodb-record connected!')
-  for (let i = 0; i < 5; i++) {
-    Category.create({ name: categoryList[i] })
-  }
-  console.log('category done')
 
-  for (let i = 0; i < recordList.length; i++) {
+  return Promise.all(Array.from(
+    { length: 2 },  // 2個測試user
+    (_, i) =>
 
-    const categoryName = recordList[i]['categoryName']
+      bcrypt
+        .genSalt(10)
+        .then(salt => bcrypt.hash(SEED_USER[i].password, salt))
+        .then(hash => User.create({
+          name: SEED_USER[i].name,
+          email: SEED_USER[i].email,
+          password: hash
+        }))
+        .then(user => {
+          const userId = user._id
+          return Promise.all(Array.from(
+            { length: SEED_USER[i].recordNumber.length }, //測試user各自records
+            (_, j) => {
 
-    Category.findOne({ name: categoryName })
-      .lean()
-      .then(category => Record.create({ ...recordList[i], categoryId: category._id }))
-  }
+              const seederNumber = SEED_USER[i].recordNumber[j]
+              const categoryName = recordList[seederNumber]['categoryName']
 
-  console.log('record done')
+              return Category.findOne({ name: categoryName })
+                .lean()
+                .then(category =>
+                  Record.create({
+                    ...recordList[seederNumber], userId, categoryId: category._id
+                  })
+                )
+            }))
+        })
+  ))
+    .then(() => {
+      console.log('Record done.')
+      process.exit()
+    })
 })

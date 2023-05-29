@@ -38,10 +38,11 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }))
+
 //引用npm handlebars-dateformat調整日期格式
 Handlebars.registerHelper('dateFormat', require('handlebars-dateformat'));
 
-//自定義 handlebars-helper調整icon格式
+//自定義 handlebars-helper調整為icon格式
 Handlebars.registerHelper('iconFormat', function (categoryName) {
   const url = categoryIcon[categoryName]      //將類別名稱轉換為url
   const iconShape = url.split('/').slice(4)[0].split('?')[0]
@@ -49,6 +50,7 @@ Handlebars.registerHelper('iconFormat', function (categoryName) {
   const fontAwesomeIcon = `<i class= "fa-${iconShape} fa-${iconStyle} h5"></i>`
   return fontAwesomeIcon
 })
+
 //引用npm handlebars.numeral調整金額千分位格式
 NumeralHelper.registerHelpers(Handlebars);
 
@@ -67,8 +69,8 @@ app.use(flash())
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.isAuthenticated()
   res.locals.user = req.user
-  res.locals.success_msg = req.flash('success_msg')  // 設定 success_msg 訊息
-  res.locals.warning_msg = req.flash('warning_msg')  // 設定 warning_msg 訊息
+  res.locals.success_msg = req.flash('success_msg')
+  res.locals.warning_msg = req.flash('warning_msg')
   next()
 })
 

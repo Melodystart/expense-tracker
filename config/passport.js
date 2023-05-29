@@ -58,7 +58,7 @@ module.exports = app => {
   })
   passport.deserializeUser((id, done) => {
     User.findById(id)
-      .lean()  //把資料庫物件轉換成 JavaScript 原生物件
+      .lean()
       .then(user => done(null, user))
       .catch(err => done(err, null))
   })

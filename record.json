@@ -4,35 +4,30 @@
       "name": "午餐",
       "date": "2019-04-23",
       "amount": 60,
-      "userId": 1,
       "categoryName": "餐飲食品"
     },
     {
       "name": "晚餐",
       "date": "2019-04-23",
       "amount": 60,
-      "userId": 1,
       "categoryName": "餐飲食品"
     },
     {
       "name": "捷運",
       "date": "2019-04-23",
       "amount": 120,
-      "userId": 1,
       "categoryName": "交通出行"
     },
     {
       "name": "電影：驚奇隊長",
       "date": "2019-04-23",
       "amount": 220,
-      "userId": 2,
       "categoryName": "休閒娛樂"
     },
     {
       "name": "租金",
       "date": "2015-04-01",
       "amount": 25000,
-      "userId": 1,
       "categoryName": "家居物業"
     }
   ]
