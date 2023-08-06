@@ -11,7 +11,7 @@
 2. 安裝與執行步驟 (installation and execution)：   
 
 ． 將本專案clone至本機位置   
-  git clone https://github.com/Melodystart/expense-tracker-2.git  
+  git clone https://github.com/Melodystart/expense-tracker.git  
 
 ． cd進入至專案資料夾，並執行以下安裝套件及執行程式指令   
   npm install     
